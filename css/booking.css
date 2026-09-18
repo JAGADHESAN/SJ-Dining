@@ -1,0 +1,156 @@
+.booking-page {
+    min-height: 100vh;
+
+    padding: 140px 20px 80px;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.55),
+            rgba(0, 0, 0, 0.55)
+        ),
+        url("../images/turf web.webp");
+
+    background-size: cover;
+    background-position: center;
+}
+
+
+.booking-container {
+    width: 100%;
+    max-width: 650px;
+
+    margin: auto;
+
+    padding: 40px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+
+.booking-heading {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+.booking-heading h1 {
+    font-size: 38px;
+
+    margin-bottom: 10px;
+}
+
+
+.booking-heading p {
+    color: #666;
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: bold;
+}
+
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #e63946;
+}
+
+
+.form-row {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 20px;
+}
+
+
+.booking-submit {
+    width: 100%;
+
+    border: none;
+
+    padding: 15px;
+
+    border-radius: 6px;
+
+    background: #25d366;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.booking-submit:hover {
+    opacity: 0.9;
+
+    transform: translateY(-2px);
+}
+
+
+.booking-note {
+    text-align: center;
+
+    margin-top: 20px;
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+@media (max-width: 600px) {
+
+    .booking-container {
+        padding: 25px 20px;
+    }
+
+    .booking-heading h1 {
+        font-size: 30px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+}

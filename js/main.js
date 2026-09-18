@@ -1,0 +1,1 @@
+console.log("SJ Dining website loaded successfully.");
