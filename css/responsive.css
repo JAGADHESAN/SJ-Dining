@@ -1,69 +1,370 @@
+/* =====================================================
+   SJ DINING - RESPONSIVE DESIGN
+   Mobile / Tablet / Desktop
+===================================================== */
+
+
+/* =====================================================
+   TABLETS
+   901px and below
+===================================================== */
+
 @media (max-width: 900px) {
+
+    /* ---------- NAVBAR ---------- */
 
     .navbar {
         padding: 15px 5%;
     }
 
     .navbar nav {
-        gap: 12px;
+        gap: 14px;
     }
 
     .navbar nav a {
-        font-size: 13px;
+        font-size: 14px;
     }
+
+    .logo {
+        font-size: 25px;
+    }
+
+
+    /* ---------- HERO ---------- */
 
     .hero h1 {
         font-size: 55px;
     }
 
-    .food-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+    .hero-content {
+        max-width: 700px;
     }
+
+    .hero-content > p:not(.welcome):not(.opening) {
+        font-size: 18px;
+    }
+
+
+    /* ---------- SECTIONS ---------- */
+
+    .section-container {
+        width: 90%;
+    }
+
+    section h2 {
+        font-size: 36px;
+    }
+
+
+    /* ---------- FOOD GRID ---------- */
+
+    .food-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .food-card {
+        padding: 25px 18px;
+    }
+
 }
 
 
+/* =====================================================
+   MOBILE
+   600px and below
+===================================================== */
+
 @media (max-width: 600px) {
+
+    /* ---------- GENERAL ---------- */
+
+    html {
+        overflow-x: hidden;
+    }
+
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+
+    /* ---------- NAVBAR ---------- */
 
     .navbar {
         position: relative;
 
+        width: 100%;
+
         flex-direction: column;
 
-        gap: 15px;
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 12px;
+
+        padding: 15px 20px;
+    }
+
+    .logo {
+        font-size: 26px;
+        text-align: center;
     }
 
     .navbar nav {
+        width: 100%;
+
+        display: flex;
+
         flex-wrap: wrap;
+
         justify-content: center;
+
+        align-items: center;
+
+        gap: 8px 14px;
     }
 
+    .navbar nav a {
+        font-size: 13px;
+        padding: 4px 2px;
+    }
+
+    .book-btn {
+        padding: 8px 13px !important;
+    }
+
+
+    /* ---------- HERO ---------- */
+
     .hero {
-        min-height: 90vh;
+        min-height: 88vh;
+
+        background-position: center;
     }
 
     .hero-overlay {
-        min-height: 90vh;
+        min-height: 88vh;
+
+        padding: 70px 18px 40px;
+    }
+
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .welcome {
+        font-size: 11px;
+
+        letter-spacing: 2.5px;
+
+        margin-bottom: 12px;
     }
 
     .hero h1 {
         font-size: 42px;
+
+        line-height: 1.1;
+
+        margin-bottom: 15px;
     }
 
-    .hero-content > p {
+    .hero-content > p:not(.welcome):not(.opening) {
         font-size: 16px;
+
+        line-height: 1.5;
+
+        margin-bottom: 24px;
     }
 
-    section h2 {
-        font-size: 30px;
+
+    /* ---------- HERO BUTTONS ---------- */
+
+    .hero-buttons {
+        width: 100%;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 10px;
     }
 
-    .food-grid {
-        grid-template-columns: 1fr;
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+
+        max-width: 280px;
+
+        text-align: center;
+
+        padding: 12px 20px;
+    }
+
+    .opening {
+        margin-top: 22px;
+
+        font-size: 14px;
+    }
+
+
+    /* ---------- SECTIONS ---------- */
+
+    .section-container {
+        width: 90%;
     }
 
     .welcome-section,
     .menu-preview {
         padding: 60px 0;
     }
+
+    .section-small-title {
+        font-size: 12px;
+
+        letter-spacing: 2px;
+    }
+
+    section h2 {
+        font-size: 30px;
+
+        line-height: 1.2;
+
+        margin-bottom: 16px;
+    }
+
+    .welcome-section p:not(.section-small-title) {
+        font-size: 15px;
+
+        line-height: 1.7;
+    }
+
+
+    /* ---------- FOOD GRID ---------- */
+
+    .food-grid {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+
+        margin: 30px 0;
+    }
+
+    .food-card {
+        width: 100%;
+
+        padding: 25px 20px;
+    }
+
+    .food-card h3 {
+        font-size: 20px;
+    }
+
+    .food-card p {
+        font-size: 14px;
+    }
+
+
+    /* ---------- BOOKING CTA ---------- */
+
+    .booking-cta {
+        padding: 60px 20px;
+    }
+
+    .booking-cta h2 {
+        font-size: 30px;
+    }
+
+    .booking-cta p {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+
+    /* ---------- FOOTER ---------- */
+
+    .footer-content {
+        padding: 40px 20px;
+    }
+
+    .footer-content p {
+        font-size: 14px;
+    }
+
+    .copyright {
+        padding: 16px;
+
+        font-size: 13px;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONES
+   400px and below
+===================================================== */
+
+@media (max-width: 400px) {
+
+    .navbar {
+        padding: 13px 15px;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    .navbar nav {
+        gap: 6px 10px;
+    }
+
+    .navbar nav a {
+        font-size: 12px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .welcome {
+        font-size: 10px;
+    }
+
+    .hero-content > p:not(.welcome):not(.opening) {
+        font-size: 15px;
+    }
+
+    section h2 {
+        font-size: 27px;
+    }
+
+    .food-card {
+        padding: 22px 16px;
+    }
+
+}
+
+
+/* =====================================================
+   LANDSCAPE MOBILE
+===================================================== */
+
+@media (max-width: 900px) and (orientation: landscape) {
+
+    .hero,
+    .hero-overlay {
+        min-height: 100vh;
+    }
+
+    .hero-overlay {
+        padding-top: 80px;
+    }
+
+    .hero h1 {
+        font-size: 45px;
+    }
+
 }
