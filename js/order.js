@@ -2,58 +2,81 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("SJ Dining Order page loaded.");
 
-    // -----------------------------
-    // GET TABLE NUMBER FROM URL
-    // -----------------------------
+    /* ==========================================
+       GET TABLE NUMBER
+    ========================================== */
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const tableNumber = urlParams.get("table");
+    const urlParams =
+        new URLSearchParams(window.location.search);
 
-    const tableDisplay = document.getElementById("tableDisplay");
+    const tableNumber =
+        urlParams.get("table");
+
+    const tableDisplay =
+        document.getElementById("tableDisplay");
 
     if (tableNumber) {
-        tableDisplay.textContent = "Table " + tableNumber;
+
+        tableDisplay.textContent =
+            "Table " + tableNumber;
+
     } else {
-        tableDisplay.textContent = "Table Not Selected";
+
+        tableDisplay.textContent =
+            "Table Not Selected";
     }
 
 
-    // -----------------------------
-    // CART
-    // -----------------------------
+    /* ==========================================
+       CART
+    ========================================== */
 
     let cart = [];
 
 
-    // -----------------------------
-    // ADD BUTTONS
-    // -----------------------------
+    /* ==========================================
+       ADD BUTTONS
+    ========================================== */
 
-    const addButtons = document.querySelectorAll(".add-btn");
+    const addButtons =
+        document.querySelectorAll(".add-btn");
 
     addButtons.forEach(function (button) {
 
-        button.addEventListener("click", function () {
+        button.addEventListener(
+            "click",
+            function () {
 
-            const name = button.dataset.name;
-            const price = Number(button.dataset.price);
+                const name =
+                    button.dataset.name;
 
-            addToCart(name, price);
+                const price =
+                    Number(button.dataset.price);
 
-        });
-
+                addToCart(
+                    name,
+                    price
+                );
+            }
+        );
     });
 
 
-    // -----------------------------
-    // ADD ITEM TO CART
-    // -----------------------------
+    /* ==========================================
+       ADD TO CART
+    ========================================== */
 
-    function addToCart(name, price) {
+    function addToCart(
+        name,
+        price
+    ) {
 
-        const existingItem = cart.find(function (item) {
-            return item.name === name;
-        });
+        const existingItem =
+            cart.find(function (item) {
+
+                return item.name === name;
+
+            });
 
         if (existingItem) {
 
@@ -62,32 +85,44 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
 
             cart.push({
-                name: name,
-                price: price,
-                quantity: 1
-            });
 
+                name: name,
+
+                price: price,
+
+                quantity: 1
+
+            });
         }
 
         updateCart();
     }
 
 
-    // -----------------------------
-    // UPDATE CART
-    // -----------------------------
+    /* ==========================================
+       UPDATE CART
+    ========================================== */
 
     function updateCart() {
 
-        const cartItems = document.getElementById("cartItems");
-        const cartTotal = document.getElementById("cartTotal");
+        const cartItems =
+            document.getElementById(
+                "cartItems"
+            );
+
+        const cartTotal =
+            document.getElementById(
+                "cartTotal"
+            );
+
 
         if (cart.length === 0) {
 
             cartItems.innerHTML =
                 '<div class="empty-cart">No items added yet.</div>';
 
-            cartTotal.textContent = "₹0";
+            cartTotal.textContent =
+                "₹0";
 
             return;
         }
@@ -98,353 +133,466 @@ document.addEventListener("DOMContentLoaded", function () {
         let total = 0;
 
 
-        cart.forEach(function (item, index) {
+        cart.forEach(
+            function (item, index) {
 
-            const itemTotal = item.price * item.quantity;
+                const itemTotal =
+                    item.price *
+                    item.quantity;
 
-            total += itemTotal;
-
-
-            const cartItem = document.createElement("div");
-
-            cartItem.className = "cart-item";
+                total += itemTotal;
 
 
-            cartItem.innerHTML = `
-                <div>
-                    <strong>${item.name}</strong>
-                    <br>
-                    ₹${item.price} × ${item.quantity}
-                    = ₹${itemTotal}
-                </div>
+                const cartItem =
+                    document.createElement(
+                        "div"
+                    );
 
-                <div class="cart-controls">
-
-                    <button
-                        class="minus-btn"
-                        data-index="${index}">
-                        −
-                    </button>
-
-                    <span>${item.quantity}</span>
-
-                    <button
-                        class="plus-btn"
-                        data-index="${index}">
-                        +
-                    </button>
-
-                </div>
-            `;
+                cartItem.className =
+                    "cart-item";
 
 
-            cartItems.appendChild(cartItem);
+                cartItem.innerHTML = `
 
-        });
+                    <div>
+
+                        <strong>
+                            ${item.name}
+                        </strong>
+
+                        <br>
+
+                        ₹${item.price}
+                        ×
+                        ${item.quantity}
+
+                        =
+                        ₹${itemTotal}
+
+                    </div>
 
 
-        cartTotal.textContent = "₹" + total;
+                    <div class="cart-controls">
+
+                        <button
+                            class="minus-btn"
+                            data-index="${index}">
+                            −
+                        </button>
 
 
-        // -----------------------------
-        // MINUS BUTTONS
-        // -----------------------------
+                        <span>
+                            ${item.quantity}
+                        </span>
+
+
+                        <button
+                            class="plus-btn"
+                            data-index="${index}">
+                            +
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                cartItems.appendChild(
+                    cartItem
+                );
+            }
+        );
+
+
+        cartTotal.textContent =
+            "₹" + total;
+
+
+        /* MINUS BUTTON */
 
         document
             .querySelectorAll(".minus-btn")
             .forEach(function (button) {
 
-                button.addEventListener("click", function () {
+                button.addEventListener(
+                    "click",
+                    function () {
 
-                    const index =
-                        Number(button.dataset.index);
+                        const index =
+                            Number(
+                                button.dataset.index
+                            );
 
-                    cart[index].quantity--;
+                        cart[index].quantity--;
 
 
-                    if (cart[index].quantity <= 0) {
+                        if (
+                            cart[index].quantity <= 0
+                        ) {
 
-                        cart.splice(index, 1);
+                            cart.splice(
+                                index,
+                                1
+                            );
+                        }
 
+
+                        updateCart();
                     }
-
-
-                    updateCart();
-
-                });
-
+                );
             });
 
 
-        // -----------------------------
-        // PLUS BUTTONS
-        // -----------------------------
+        /* PLUS BUTTON */
 
         document
             .querySelectorAll(".plus-btn")
             .forEach(function (button) {
 
-                button.addEventListener("click", function () {
+                button.addEventListener(
+                    "click",
+                    function () {
 
-                    const index =
-                        Number(button.dataset.index);
+                        const index =
+                            Number(
+                                button.dataset.index
+                            );
 
-                    cart[index].quantity++;
+                        cart[index].quantity++;
 
-                    updateCart();
-
-                });
-
+                        updateCart();
+                    }
+                );
             });
-
     }
 
 
-    // -----------------------------
-    // ORDER BUTTON
-    // -----------------------------
+    /* ==========================================
+       ORDER BUTTON
+    ========================================== */
 
     const orderButton =
-        document.getElementById("orderButton");
+        document.getElementById(
+            "orderButton"
+        );
 
 
-    orderButton.addEventListener("click", async function () {
+    orderButton.addEventListener(
+        "click",
+        async function () {
 
-        const customerName =
-            document
-                .getElementById("customerName")
-                .value
-                .trim();
+            /* CUSTOMER NAME */
 
-
-        // -----------------------------
-        // VALIDATION
-        // -----------------------------
-
-        if (!customerName) {
-
-            alert("Please enter your name.");
-
-            return;
-        }
+            const customerName =
+                document
+                    .getElementById(
+                        "customerName"
+                    )
+                    .value
+                    .trim();
 
 
-        if (!tableNumber) {
+            /* CUSTOMER PHONE */
 
-            alert(
-                "Table number is missing.\n\n" +
-                "Please scan the table QR code."
-            );
-
-            return;
-        }
-
-
-        if (cart.length === 0) {
-
-            alert("Please add at least one food item.");
-
-            return;
-        }
+            const customerPhone =
+                document
+                    .getElementById(
+                        "customerPhone"
+                    )
+                    .value
+                    .trim();
 
 
-        // -----------------------------
-        // CHECK SUPABASE
-        // -----------------------------
+            /* VALIDATE NAME */
 
-        if (typeof supabaseClient === "undefined") {
-
-            alert(
-                "Supabase connection failed.\n\n" +
-                "Please check js/supabase.js"
-            );
-
-            return;
-        }
-
-
-        // -----------------------------
-        // CALCULATE TOTAL
-        // -----------------------------
-
-        let total = 0;
-
-        cart.forEach(function (item) {
-
-            total += item.price * item.quantity;
-
-        });
-
-
-        // -----------------------------
-        // PREVENT DOUBLE CLICK
-        // -----------------------------
-
-        orderButton.disabled = true;
-
-        orderButton.textContent = "Saving Order...";
-
-
-        try {
-
-            console.log("Saving food order to Supabase...");
-
-
-            // -----------------------------
-            // SAVE ORDER TO SUPABASE
-            // -----------------------------
-
-            const { error } = await supabaseClient
-                .from("food_orders")
-                .insert({
-
-                    customer_name: customerName,
-
-                    table_number: tableNumber,
-
-                    items: cart,
-
-                    total_amount: total,
-
-                    status: "pending"
-
-                });
-
-
-            // -----------------------------
-            // HANDLE DATABASE ERROR
-            // -----------------------------
-
-            if (error) {
-
-                console.error(
-                    "FOOD ORDER SUPABASE ERROR:",
-                    error
-                );
-
+            if (!customerName) {
 
                 alert(
-                    "Order could not be saved.\n\n" +
-                    error.message
+                    "Please enter your name."
                 );
-
-
-                orderButton.disabled = false;
-
-                orderButton.textContent =
-                    "Send Order via WhatsApp";
 
                 return;
             }
 
 
-            console.log(
-                "Food order saved successfully."
+            /* VALIDATE PHONE */
+
+            if (!customerPhone) {
+
+                alert(
+                    "Please enter your WhatsApp number."
+                );
+
+                return;
+            }
+
+
+            let cleanPhone =
+                customerPhone.replace(
+                    /\D/g,
+                    ""
+                );
+
+
+            /* INDIAN NUMBER */
+
+            if (
+                cleanPhone.length === 10
+            ) {
+
+                cleanPhone =
+                    "91" +
+                    cleanPhone;
+            }
+
+
+            if (
+                cleanPhone.length !== 12 ||
+                !cleanPhone.startsWith("91")
+            ) {
+
+                alert(
+                    "Please enter a valid Indian WhatsApp number."
+                );
+
+                return;
+            }
+
+
+            /* TABLE */
+
+            if (!tableNumber) {
+
+                alert(
+                    "Table number is missing.\n\n" +
+                    "Please scan the table QR code."
+                );
+
+                return;
+            }
+
+
+            /* CART */
+
+            if (cart.length === 0) {
+
+                alert(
+                    "Please add at least one food item."
+                );
+
+                return;
+            }
+
+
+            /* SUPABASE */
+
+            if (
+                typeof supabaseClient ===
+                "undefined"
+            ) {
+
+                alert(
+                    "Supabase connection failed.\n\n" +
+                    "Please check js/supabase.js"
+                );
+
+                return;
+            }
+
+
+            /* CALCULATE TOTAL */
+
+            let total = 0;
+
+            cart.forEach(
+                function (item) {
+
+                    total +=
+                        item.price *
+                        item.quantity;
+                }
             );
 
 
-            // -----------------------------
-            // CREATE WHATSAPP MESSAGE
-            // -----------------------------
+            orderButton.disabled =
+                true;
 
-            let message =
-                "SJ DINING FOOD ORDER\n\n";
-
-
-            message +=
-                "Customer: " +
-                customerName +
-                "\n";
+            orderButton.textContent =
+                "Saving Order...";
 
 
-            message +=
-                "Table: " +
-                tableNumber +
-                "\n\n";
+            try {
+
+                console.log(
+                    "Saving food order..."
+                );
 
 
-            message +=
-                "ORDER ITEMS\n";
+                /* SAVE ORDER */
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from(
+                            "food_orders"
+                        )
+                        .insert({
+
+                            customer_name:
+                                customerName,
+
+                            customer_phone:
+                                cleanPhone,
+
+                            table_number:
+                                tableNumber,
+
+                            items:
+                                cart,
+
+                            total_amount:
+                                total,
+
+                            status:
+                                "pending"
+                        });
 
 
-            cart.forEach(function (item) {
+                if (error) {
 
-                const itemTotal =
-                    item.price * item.quantity;
+                    console.error(
+                        "FOOD ORDER ERROR:",
+                        error
+                    );
+
+
+                    alert(
+                        "Order could not be saved.\n\n" +
+                        error.message
+                    );
+
+
+                    orderButton.disabled =
+                        false;
+
+                    orderButton.textContent =
+                        "Send Order via WhatsApp";
+
+                    return;
+                }
+
+
+                console.log(
+                    "Food order saved successfully."
+                );
+
+
+                /* ==================================
+                   WHATSAPP MESSAGE
+                ================================== */
+
+                let message =
+                    "SJ DINING FOOD ORDER\n\n";
 
 
                 message +=
-                    item.name +
-                    " x " +
-                    item.quantity +
-                    " = ₹" +
-                    itemTotal +
+                    "Customer: " +
+                    customerName +
                     "\n";
 
-            });
+
+                message +=
+                    "WhatsApp: " +
+                    cleanPhone +
+                    "\n";
 
 
-            message +=
-                "\nTOTAL: ₹" +
-                total;
+                message +=
+                    "Table: " +
+                    tableNumber +
+                    "\n\n";
 
 
-            message +=
-                "\n\nPlease confirm my order.";
+                message +=
+                    "ORDER ITEMS\n";
 
 
-            // -----------------------------
-            // WHATSAPP
-            // -----------------------------
+                cart.forEach(
+                    function (item) {
 
-            const whatsappNumber =
-                "919094971556";
-
-
-            const whatsappURL =
-                "https://wa.me/" +
-                whatsappNumber +
-                "?text=" +
-                encodeURIComponent(message);
+                        const itemTotal =
+                            item.price *
+                            item.quantity;
 
 
-            console.log(
-                "WhatsApp URL:",
-                whatsappURL
-            );
+                        message +=
+                            item.name +
+                            " x " +
+                            item.quantity +
+                            " = ₹" +
+                            itemTotal +
+                            "\n";
+                    }
+                );
 
 
-            alert(
-                "Order saved successfully!\n\n" +
-                "Opening WhatsApp..."
-            );
+                message +=
+                    "\nTOTAL: ₹" +
+                    total;
 
 
-            window.location.href =
-                whatsappURL;
+                message +=
+                    "\n\nPlease confirm my food order.";
 
 
-        } catch (error) {
+                /* SJ DINING WHATSAPP */
 
-            console.error(
-                "UNEXPECTED FOOD ORDER ERROR:",
-                error
-            );
+                const restaurantNumber =
+                    "919094971556";
 
 
-            alert(
-                "Something went wrong.\n\n" +
-                error.message
-            );
+                const whatsappURL =
+                    "https://wa.me/" +
+                    restaurantNumber +
+                    "?text=" +
+                    encodeURIComponent(
+                        message
+                    );
 
 
-            orderButton.disabled = false;
+                alert(
+                    "Order saved successfully!\n\n" +
+                    "Opening WhatsApp..."
+                );
 
-            orderButton.textContent =
-                "Send Order via WhatsApp";
+
+                window.location.href =
+                    whatsappURL;
+
+
+            } catch (error) {
+
+                console.error(
+                    "UNEXPECTED ERROR:",
+                    error
+                );
+
+
+                alert(
+                    "Something went wrong.\n\n" +
+                    error.message
+                );
+
+
+                orderButton.disabled =
+                    false;
+
+                orderButton.textContent =
+                    "Send Order via WhatsApp";
+            }
 
         }
-
-    });
+    );
 
 });

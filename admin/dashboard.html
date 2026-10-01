@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SJ Dining Admin Dashboard</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SJ Dining Admin</title>
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,542 +18,751 @@
     <!-- Supabase Configuration -->
     <script src="../js/supabase.js"></script>
 
+
     <style>
+
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
+
         body {
-            margin: 0;
+
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+
+            background: #f5f5f5;
+
             color: #222;
         }
 
-        header {
-            background: #000;
+
+        /* HEADER */
+
+        .header {
+
+            background: #111;
+
             color: white;
-            padding: 18px 25px;
+
+            padding: 20px 30px;
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             gap: 15px;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
+
+        .header h1 {
+
+            font-size: 25px;
         }
 
+
         .header-buttons {
+
             display: flex;
+
             gap: 10px;
         }
 
+
         button {
+
             border: none;
+
             cursor: pointer;
+
             border-radius: 6px;
+
             padding: 10px 15px;
-            font-size: 14px;
+
+            font-weight: bold;
         }
+
 
         .refresh-btn {
-            background: #ffffff;
-            color: #000;
-        }
 
-        .logout-btn {
-            background: #d32f2f;
-            color: white;
-        }
+            background: #f0ad00;
 
-        .container {
-            width: 95%;
-            max-width: 1400px;
-            margin: 25px auto;
-        }
-
-        .message {
-            display: none;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 6px;
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        /* =========================
-           BOOKING STATISTICS
-        ========================= */
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-
-        .stat-card h3 {
-            margin: 0 0 10px;
-            font-size: 15px;
-            color: #666;
-        }
-
-        .stat-card p {
-            margin: 0;
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        /* =========================
-           FOOD ORDER STATISTICS
-        ========================= */
-
-        .food-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .food-stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            border-left: 5px solid #ff9800;
-        }
-
-        .food-stat-card h3 {
-            margin: 0 0 10px;
-            font-size: 15px;
-            color: #666;
-        }
-
-        .food-stat-card p {
-            margin: 0;
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        /* =========================
-           SECTION
-        ========================= */
-
-        .section {
-            background: white;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .section-header {
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .section-header h2 {
-            margin: 0;
-            font-size: 21px;
-        }
-
-        /* =========================
-           TABLE
-        ========================= */
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
-        }
-
-        th,
-        td {
-            padding: 14px 12px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-            vertical-align: middle;
-        }
-
-        th {
-            background: #f7f7f7;
-            font-size: 13px;
-        }
-
-        td {
-            font-size: 14px;
-        }
-
-        tr:hover {
-            background: #fafafa;
-        }
-
-        /* =========================
-           STATUS
-        ========================= */
-
-        .status {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: capitalize;
-        }
-
-        .status.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status.confirmed {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status.rejected {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        /* =========================
-           ACTION BUTTONS
-        ========================= */
-
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .action-buttons button {
-            padding: 7px 10px;
-            font-size: 12px;
-        }
-
-        .confirm-btn {
-            background: #2e7d32;
-            color: white;
-        }
-
-        .reject-btn {
-            background: #ef6c00;
-            color: white;
-        }
-
-        .whatsapp-btn {
-            background: #25d366;
-            color: white;
-        }
-
-        .delete-btn {
-            background: #d32f2f;
-            color: white;
-        }
-
-        .empty-row {
-            text-align: center;
-            padding: 30px;
-            color: #777;
-        }
-
-        /* =========================
-           FOOD ITEMS
-        ========================= */
-
-        .food-items {
-            min-width: 200px;
-        }
-
-        .food-item-line {
-            margin-bottom: 4px;
-        }
-
-        .food-item-line:last-child {
-            margin-bottom: 0;
-        }
-
-        .food-order-total {
-            font-weight: bold;
             color: #111;
         }
 
-        /* =========================
-           RESPONSIVE
-        ========================= */
 
-        @media (max-width: 900px) {
+        .logout-btn {
 
-            .stats-grid,
-            .food-stats-grid {
-                grid-template-columns: 1fr;
-            }
+            background: #d9534f;
 
-            header {
+            color: white;
+        }
+
+
+        /* CONTAINER */
+
+        .container {
+
+            width: 95%;
+
+            max-width: 1400px;
+
+            margin: 30px auto;
+        }
+
+
+        /* MESSAGE */
+
+        .message {
+
+            padding: 15px;
+
+            margin-bottom: 20px;
+
+            border-radius: 6px;
+
+            display: none;
+
+            background: #d4edda;
+
+            color: #155724;
+        }
+
+
+        /* STATS */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0,0,0,.08);
+        }
+
+
+        .stat-card h3 {
+
+            color: #666;
+
+            margin-bottom: 10px;
+        }
+
+
+        .stat-card p {
+
+            font-size: 32px;
+
+            font-weight: bold;
+        }
+
+
+        /* SECTION */
+
+        .section {
+
+            margin-bottom: 30px;
+        }
+
+
+        .section-title {
+
+            background: #111;
+
+            color: white;
+
+            padding: 15px 20px;
+
+            border-radius:
+                8px 8px 0 0;
+
+            font-size: 20px;
+        }
+
+
+        /* TABLE CONTAINER */
+
+        .table-container {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius:
+                0 0 8px 8px;
+
+            overflow-x: auto;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0,0,0,.08);
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 1000px;
+        }
+
+
+        th,
+        td {
+
+            padding: 13px 10px;
+
+            border-bottom:
+                1px solid #ddd;
+
+            text-align: left;
+
+            vertical-align: middle;
+        }
+
+
+        th {
+
+            background: #111;
+
+            color: white;
+        }
+
+
+        tr:hover {
+
+            background: #fafafa;
+        }
+
+
+        /* STATUS */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .pending {
+
+            background: #fff0c2;
+
+            color: #856404;
+        }
+
+
+        .confirmed {
+
+            background: #d4edda;
+
+            color: #155724;
+        }
+
+
+        .rejected {
+
+            background: #f8d7da;
+
+            color: #721c24;
+        }
+
+
+        /* ACTIONS */
+
+        .actions {
+
+            display: flex;
+
+            gap: 6px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .actions button {
+
+            font-size: 12px;
+
+            padding: 7px 9px;
+        }
+
+
+        .confirm-btn {
+
+            background: #28a745;
+
+            color: white;
+        }
+
+
+        .reject-btn {
+
+            background: #dc3545;
+
+            color: white;
+        }
+
+
+        .delete-btn {
+
+            background: #343a40;
+
+            color: white;
+        }
+
+
+        .whatsapp-btn {
+
+            background: #25d366;
+
+            color: white;
+        }
+
+
+        /* FOOD ITEMS */
+
+        .food-item {
+
+            margin-bottom: 4px;
+        }
+
+
+        .food-total {
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        /* MOBILE */
+
+        @media(max-width:700px) {
+
+            .header {
+
                 flex-direction: column;
-                align-items: flex-start;
+
+                align-items:
+                    flex-start;
             }
+
 
             .header-buttons {
+
                 width: 100%;
             }
 
+
             .header-buttons button {
+
                 flex: 1;
             }
 
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+
             .container {
+
                 width: 94%;
             }
+
         }
 
-        @media (max-width: 600px) {
-
-            header {
-                padding: 15px;
-            }
-
-            header h1 {
-                font-size: 20px;
-            }
-
-            .container {
-                width: 92%;
-                margin: 15px auto;
-            }
-
-            .stat-card,
-            .food-stat-card {
-                padding: 20px;
-            }
-
-            .section-header {
-                padding: 16px;
-            }
-        }
     </style>
+
 </head>
+
 
 <body>
 
-<header>
-    <h1>SJ Dining Admin</h1>
 
-    <div class="header-buttons">
-        <button class="refresh-btn" onclick="refreshDashboard()">
-            🔄 Refresh
-        </button>
+    <!-- HEADER -->
 
-        <button class="logout-btn" onclick="logout()">
-            Logout
-        </button>
-    </div>
-</header>
+    <header class="header">
 
-<div class="container">
-
-    <div id="message" class="message"></div>
-
-    <!-- =====================================
-         BOOKING STATISTICS
-    ====================================== -->
-
-    <div class="stats-grid">
-
-        <div class="stat-card">
-            <h3>Total Bookings</h3>
-            <p id="totalBookings">0</p>
-        </div>
-
-        <div class="stat-card">
-            <h3>Total Guests</h3>
-            <p id="totalGuests">0</p>
-        </div>
-
-        <div class="stat-card">
-            <h3>Pending Bookings</h3>
-            <p id="pendingBookings">0</p>
-        </div>
-
-    </div>
+        <h1>
+            🍽️ SJ Dining Admin
+        </h1>
 
 
-    <!-- =====================================
-         FOOD ORDER STATISTICS
-    ====================================== -->
+        <div class="header-buttons">
 
-    <div class="food-stats-grid">
-
-        <div class="food-stat-card">
-            <h3>🍕 Total Food Orders</h3>
-            <p id="totalFoodOrders">0</p>
-        </div>
-
-        <div class="food-stat-card">
-            <h3>⏳ Pending Food Orders</h3>
-            <p id="pendingFoodOrders">0</p>
-        </div>
-
-        <div class="food-stat-card">
-            <h3>💰 Food Order Sales</h3>
-            <p id="foodOrderSales">₹0</p>
-        </div>
-
-    </div>
+            <button
+                class="refresh-btn"
+                onclick="refreshDashboard()"
+            >
+                🔄 Refresh
+            </button>
 
 
-    <!-- =====================================
-         TABLE BOOKINGS
-    ====================================== -->
-
-    <div class="section">
-
-        <div class="section-header">
-            <h2>📅 Table Bookings</h2>
-        </div>
-
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Phone</th>
-                        <th>Guests</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Requirements</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody id="bookingTableBody">
-
-                    <tr>
-                        <td colspan="8" class="empty-row">
-                            Loading bookings...
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
 
         </div>
 
-    </div>
+    </header>
 
 
-    <!-- =====================================
-         FOOD ORDERS
-    ====================================== -->
 
-    <div class="section">
+    <main class="container">
 
-        <div class="section-header">
-            <h2>🍕 Food Orders</h2>
-        </div>
 
-        <div class="table-wrapper">
+        <div
+            id="message"
+            class="message"
+        ></div>
 
-            <table>
 
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Table</th>
-                        <th>Items</th>
-                        <th>Total</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+        <!-- BOOKING STATS -->
 
-                <tbody id="foodOrdersTableBody">
+        <section class="stats">
 
-                    <tr>
-                        <td colspan="7" class="empty-row">
-                            Loading food orders...
-                        </td>
-                    </tr>
+            <div class="stat-card">
 
-                </tbody>
+                <h3>
+                    Total Bookings
+                </h3>
 
-            </table>
+                <p id="totalBookings">
+                    0
+                </p>
 
-        </div>
+            </div>
 
-    </div>
 
-</div>
+            <div class="stat-card">
+
+                <h3>
+                    Total Guests
+                </h3>
+
+                <p id="totalGuests">
+                    0
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Pending Bookings
+                </h3>
+
+                <p id="pendingBookings">
+                    0
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- FOOD ORDER STATS -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <h3>
+                    🍕 Total Food Orders
+                </h3>
+
+                <p id="totalFoodOrders">
+                    0
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    ⏳ Pending Food Orders
+                </h3>
+
+                <p id="pendingFoodOrders">
+                    0
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    💰 Food Order Sales
+                </h3>
+
+                <p id="foodOrderSales">
+                    ₹0
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             BOOKINGS
+        ================================== -->
+
+        <section class="section">
+
+            <div class="section-title">
+                📅 Table Bookings
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                People
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Requirements
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="bookingTableBody"
+                    >
+
+                        <tr>
+
+                            <td
+                                colspan="8"
+                            >
+                                Loading bookings...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================
+             FOOD ORDERS
+        ================================== -->
+
+        <section class="section">
+
+            <div class="section-title">
+                🍕 Food Orders
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Table
+                            </th>
+
+                            <th>
+                                Items
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="foodOrdersTableBody"
+                    >
+
+                        <tr>
+
+                            <td
+                                colspan="8"
+                            >
+                                Loading food orders...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
 
 
 <script>
 
-    /* ==========================================
-       CHECK ADMIN LOGIN
-    ========================================== */
+
+    /* =========================================
+       CHECK ADMIN
+    ========================================= */
 
     async function checkAdmin() {
 
         const {
-            data: {
-                session
-            },
+            data,
             error
-        } = await supabaseClient.auth.getSession();
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
 
-        if (error) {
 
-            console.error(
-                "Session error:",
-                error
-            );
+        if (
+            error ||
+            !data.user
+        ) {
 
-            window.location.href = "login.html";
+            window.location.href =
+                "login.html";
 
-            return;
+            return false;
         }
 
-        if (!session) {
 
-            window.location.href = "login.html";
-
-            return;
-        }
-
-        console.log(
-            "Admin logged in:",
-            session.user.email
-        );
+        return true;
     }
 
 
-    /* ==========================================
-       LOAD EVERYTHING
-    ========================================== */
+
+    /* =========================================
+       REFRESH DASHBOARD
+    ========================================= */
 
     async function refreshDashboard() {
+
+        const allowed =
+            await checkAdmin();
+
+        if (!allowed) {
+            return;
+        }
+
 
         await loadBookings();
 
         await loadFoodOrders();
+
 
         showMessage(
             "Dashboard refreshed successfully."
@@ -555,379 +770,499 @@
     }
 
 
-    /* ==========================================
+
+    /* =========================================
        LOAD BOOKINGS
-    ========================================== */
+    ========================================= */
 
     async function loadBookings() {
+
+        const allowed =
+            await checkAdmin();
+
+        if (!allowed) {
+            return;
+        }
+
 
         const tableBody =
             document.getElementById(
                 "bookingTableBody"
             );
 
+
         tableBody.innerHTML = `
             <tr>
-                <td colspan="8" class="empty-row">
+                <td colspan="8">
                     Loading bookings...
                 </td>
             </tr>
         `;
 
+
         const {
             data,
             error
-        } = await supabaseClient
-            .from("bookings")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+        } =
+            await supabaseClient
+                .from("bookings")
+                .select("*")
+                .order(
+                    "booking_date",
+                    {
+                        ascending: true
+                    }
+                )
+                .order(
+                    "booking_time",
+                    {
+                        ascending: true
+                    }
+                );
+
 
         if (error) {
 
             console.error(
-                "Booking loading error:",
+                "BOOKING ERROR:",
                 error
             );
 
+
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="8" class="empty-row">
-                        Error loading bookings.
+                    <td colspan="8">
+                        Error loading bookings:
+                        ${escapeHTML(
+                            error.message
+                        )}
                     </td>
                 </tr>
             `;
 
-            showMessage(
-                "Error loading bookings: " +
-                error.message
-            );
-
             return;
         }
 
-        if (!data || data.length === 0) {
+
+        updateBookingStatistics(
+            data || []
+        );
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
 
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="8" class="empty-row">
+                    <td colspan="8">
                         No bookings found.
                     </td>
                 </tr>
             `;
 
-            updateBookingStatistics([]);
-
             return;
         }
 
+
         tableBody.innerHTML = "";
 
-        data.forEach(function (booking) {
 
-            const row =
-                document.createElement("tr");
+        data.forEach(
+            function (booking) {
 
-            const status =
-                booking.status || "pending";
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
 
-            row.innerHTML = `
 
-                <td>
-                    ${escapeHTML(
-                        booking.customer_name || ""
-                    )}
-                </td>
+                const status =
+                    booking.status ||
+                    "pending";
 
-                <td>
-                    ${escapeHTML(
-                        booking.phone || ""
-                    )}
-                </td>
 
-                <td>
-                    ${escapeHTML(
-                        String(
-                            booking.number_of_people || ""
-                        )
-                    )}
-                </td>
+                row.innerHTML = `
 
-                <td>
-                    ${escapeHTML(
-                        booking.booking_date || ""
-                    )}
-                </td>
+                    <td>
+                        ${escapeHTML(
+                            booking.customer_name
+                        )}
+                    </td>
 
-                <td>
-                    ${escapeHTML(
-                        booking.booking_time || ""
-                    )}
-                </td>
 
-                <td>
-                    ${escapeHTML(
-                        booking.special_requirements || "-"
-                    )}
-                </td>
+                    <td>
+                        ${escapeHTML(
+                            booking.phone
+                        )}
+                    </td>
 
-                <td>
-                    <span class="status ${status}">
-                        ${escapeHTML(status)}
-                    </span>
-                </td>
 
-                <td>
+                    <td>
+                        ${booking.number_of_people}
+                    </td>
 
-                    <div class="action-buttons">
 
-                        <button
-                            class="confirm-btn"
-                            onclick="updateBookingStatus(
-                                ${booking.id},
-                                'confirmed'
-                            )">
-                            Confirm
-                        </button>
+                    <td>
+                        ${escapeHTML(
+                            booking.booking_date
+                        )}
+                    </td>
 
-                        <button
-                            class="reject-btn"
-                            onclick="updateBookingStatus(
-                                ${booking.id},
-                                'rejected'
-                            )">
-                            Reject
-                        </button>
 
-                        <button
-                            class="whatsapp-btn"
-                            onclick="openBookingWhatsApp(
-                                '${escapeJS(
-                                    booking.customer_name || ""
-                                )}',
-                                '${escapeJS(
-                                    booking.phone || ""
-                                )}',
-                                '${escapeJS(
-                                    booking.booking_date || ""
-                                )}',
-                                '${escapeJS(
-                                    booking.booking_time || ""
-                                )}',
-                                '${escapeJS(
-                                    String(
-                                        booking.number_of_people || ""
+                    <td>
+                        ${escapeHTML(
+                            booking.booking_time
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            booking.special_requirements ||
+                            "None"
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status ${status}"
+                        >
+                            ${escapeHTML(
+                                status
+                            )}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="actions">
+
+                            <button
+                                class="confirm-btn"
+                                onclick="
+                                    updateBookingStatus(
+                                        '${escapeJS(
+                                            booking.id
+                                        )}',
+                                        'confirmed'
                                     )
-                                )}'
-                            )">
-                            WhatsApp
-                        </button>
+                                "
+                            >
+                                Confirm
+                            </button>
 
-                        <button
-                            class="delete-btn"
-                            onclick="deleteBooking(
-                                ${booking.id}
-                            )">
-                            Delete
-                        </button>
 
-                    </div>
+                            <button
+                                class="reject-btn"
+                                onclick="
+                                    updateBookingStatus(
+                                        '${escapeJS(
+                                            booking.id
+                                        )}',
+                                        'rejected'
+                                    )
+                                "
+                            >
+                                Reject
+                            </button>
 
-                </td>
-            `;
 
-            tableBody.appendChild(row);
-        });
+                            <button
+                                class="whatsapp-btn"
+                                onclick="
+                                    sendBookingWhatsApp(
+                                        '${escapeJS(
+                                            booking.customer_name
+                                        )}',
+                                        '${escapeJS(
+                                            booking.phone
+                                        )}',
+                                        '${escapeJS(
+                                            booking.booking_date
+                                        )}',
+                                        '${escapeJS(
+                                            booking.booking_time
+                                        )}',
+                                        '${escapeJS(
+                                            booking.number_of_people
+                                        )}',
+                                        '${escapeJS(
+                                            status
+                                        )}'
+                                    )
+                                "
+                            >
+                                WhatsApp
+                            </button>
 
-        updateBookingStatistics(data);
+
+                            <button
+                                class="delete-btn"
+                                onclick="
+                                    deleteBooking(
+                                        '${escapeJS(
+                                            booking.id
+                                        )}'
+                                    )
+                                "
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                tableBody.appendChild(
+                    row
+                );
+
+            }
+        );
     }
 
 
-    /* ==========================================
+
+    /* =========================================
        BOOKING STATISTICS
-    ========================================== */
+    ========================================= */
 
-    function updateBookingStatistics(bookings) {
+    function updateBookingStatistics(
+        bookings
+    ) {
 
-        const total =
+        const totalBookings =
             bookings.length;
 
-        let guests = 0;
 
-        let pending = 0;
+        let totalGuests = 0;
 
-        bookings.forEach(function (booking) {
+        let pendingBookings = 0;
 
-            guests += Number(
-                booking.number_of_people || 0
-            );
 
-            if (
-                (booking.status || "pending")
-                === "pending"
-            ) {
-                pending++;
+        bookings.forEach(
+            function (booking) {
+
+                totalGuests +=
+                    Number(
+                        booking.number_of_people ||
+                        0
+                    );
+
+
+                if (
+                    (booking.status ||
+                        "pending") ===
+                    "pending"
+                ) {
+
+                    pendingBookings++;
+                }
+
             }
-        });
+        );
+
 
         document.getElementById(
             "totalBookings"
-        ).textContent = total;
+        ).textContent =
+            totalBookings;
+
 
         document.getElementById(
             "totalGuests"
-        ).textContent = guests;
+        ).textContent =
+            totalGuests;
+
 
         document.getElementById(
             "pendingBookings"
-        ).textContent = pending;
+        ).textContent =
+            pendingBookings;
     }
 
 
-    /* ==========================================
-       UPDATE BOOKING STATUS
-    ========================================== */
+
+    /* =========================================
+       UPDATE BOOKING
+    ========================================= */
 
     async function updateBookingStatus(
         id,
         newStatus
     ) {
 
+        const action =
+            newStatus === "confirmed"
+                ? "confirm"
+                : "reject";
+
+
+        if (
+            !confirm(
+                "Are you sure you want to " +
+                action +
+                " this booking?"
+            )
+        ) {
+
+            return;
+        }
+
+
         const {
             error
-        } = await supabaseClient
-            .from("bookings")
-            .update({
-                status: newStatus
-            })
-            .eq(
-                "id",
-                id
-            );
+        } =
+            await supabaseClient
+                .from("bookings")
+                .update({
+                    status:
+                        newStatus
+                })
+                .eq(
+                    "id",
+                    id
+                );
+
 
         if (error) {
 
-            console.error(
-                "Booking update error:",
-                error
-            );
-
             alert(
-                "Failed to update booking:\n" +
+                "Could not update booking:\n\n" +
                 error.message
             );
 
             return;
         }
 
+
         showMessage(
-            "Booking status updated."
+            "Booking " +
+            newStatus +
+            " successfully."
         );
+
 
         await loadBookings();
     }
 
 
-    /* ==========================================
-       DELETE BOOKING
-    ========================================== */
 
-    async function deleteBooking(id) {
-
-        const confirmed =
-            confirm(
-                "Are you sure you want to delete this booking?"
-            );
-
-        if (!confirmed) {
-            return;
-        }
-
-        const {
-            error
-        } = await supabaseClient
-            .from("bookings")
-            .delete()
-            .eq(
-                "id",
-                id
-            );
-
-        if (error) {
-
-            console.error(
-                "Booking delete error:",
-                error
-            );
-
-            alert(
-                "Failed to delete booking:\n" +
-                error.message
-            );
-
-            return;
-        }
-
-        showMessage(
-            "Booking deleted successfully."
-        );
-
-        await loadBookings();
-    }
-
-
-    /* ==========================================
+    /* =========================================
        BOOKING WHATSAPP
-    ========================================== */
+    ========================================= */
 
-    function openBookingWhatsApp(
+    function sendBookingWhatsApp(
         customerName,
         phone,
         bookingDate,
         bookingTime,
-        guests
+        people,
+        status
     ) {
 
+        let cleanPhone =
+            String(phone)
+                .replace(
+                    /\D/g,
+                    ""
+                );
+
+
+        /* INDIAN NUMBER */
+
+        if (
+            cleanPhone.length === 10
+        ) {
+
+            cleanPhone =
+                "91" +
+                cleanPhone;
+        }
+
+
+        if (
+            cleanPhone.length < 12
+        ) {
+
+            alert(
+                "Invalid customer WhatsApp number."
+            );
+
+            return;
+        }
+
+
         let message =
-            "SJ DINING BOOKING\n\n";
-
-        message +=
-            "Customer: " +
+            "Hello " +
             customerName +
-            "\n";
+            ",\n\n";
+
+
+        if (
+            status === "confirmed"
+        ) {
+
+            message +=
+                "Your SJ Dining table booking has been CONFIRMED. ✅\n\n";
+
+        } else if (
+            status === "rejected"
+        ) {
+
+            message +=
+                "We are sorry, but your SJ Dining table booking could not be confirmed. ❌\n\n";
+
+        } else {
+
+            message +=
+                "Your SJ Dining table booking is currently PENDING. ⏳\n\n";
+        }
+
 
         message +=
-            "Phone: " +
-            phone +
-            "\n";
+            "BOOKING DETAILS\n";
+
 
         message +=
             "Guests: " +
-            guests +
+            people +
             "\n";
+
 
         message +=
             "Date: " +
             bookingDate +
             "\n";
 
+
         message +=
             "Time: " +
             bookingTime +
             "\n\n";
 
+
         message +=
-            "Please confirm the booking.";
+            "Thank you for choosing SJ Dining! 🍽️";
+
 
         const url =
             "https://wa.me/" +
-            phone.replace(/\D/g, "") +
+            cleanPhone +
             "?text=" +
-            encodeURIComponent(message);
+            encodeURIComponent(
+                message
+            );
+
 
         window.open(
             url,
@@ -936,231 +1271,374 @@
     }
 
 
-    /* ==========================================
-       LOAD FOOD ORDERS
-    ========================================== */
 
-    async function loadFoodOrders() {
+    /* =========================================
+       DELETE BOOKING
+    ========================================= */
 
-        const tableBody =
-            document.getElementById(
-                "foodOrdersTableBody"
-            );
+    async function deleteBooking(
+        id
+    ) {
 
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="7" class="empty-row">
-                    Loading food orders...
-                </td>
-            </tr>
-        `;
+        if (
+            !confirm(
+                "Delete this booking permanently?"
+            )
+        ) {
+
+            return;
+        }
+
 
         const {
-            data,
             error
-        } = await supabaseClient
-            .from("food_orders")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+        } =
+            await supabaseClient
+                .from("bookings")
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
+
 
         if (error) {
 
-            console.error(
-                "Food order loading error:",
-                error
-            );
-
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="7" class="empty-row">
-                        Error loading food orders.
-                    </td>
-                </tr>
-            `;
-
-            showMessage(
-                "Error loading food orders: " +
+            alert(
+                "Could not delete booking:\n\n" +
                 error.message
             );
 
             return;
         }
 
-        if (!data || data.length === 0) {
+
+        showMessage(
+            "Booking deleted successfully."
+        );
+
+
+        await loadBookings();
+    }
+
+
+
+    /* =========================================
+       LOAD FOOD ORDERS
+    ========================================= */
+
+    async function loadFoodOrders() {
+
+        const allowed =
+            await checkAdmin();
+
+        if (!allowed) {
+            return;
+        }
+
+
+        const tableBody =
+            document.getElementById(
+                "foodOrdersTableBody"
+            );
+
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    Loading food orders...
+                </td>
+            </tr>
+        `;
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("food_orders")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "FOOD ORDER ERROR:",
+                error
+            );
+
 
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="7" class="empty-row">
+                    <td colspan="8">
+                        Error loading food orders:
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        updateFoodOrderStatistics(
+            data || []
+        );
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8">
                         No food orders found.
                     </td>
                 </tr>
             `;
 
-            updateFoodOrderStatistics([]);
-
             return;
         }
 
+
         tableBody.innerHTML = "";
 
-        data.forEach(function (order) {
 
-            const row =
-                document.createElement("tr");
+        data.forEach(
+            function (order) {
 
-            const status =
-                order.status || "pending";
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
 
-            let itemsHTML = "";
 
-            if (
-                Array.isArray(order.items)
-            ) {
+                const status =
+                    order.status ||
+                    "pending";
 
-                order.items.forEach(
-                    function (item) {
 
-                        itemsHTML += `
-                            <div class="food-item-line">
-                                ${escapeHTML(
-                                    item.name || ""
-                                )}
-                                ×
-                                ${escapeHTML(
-                                    String(
-                                        item.quantity || 0
+                let itemsHTML =
+                    "";
+
+
+                if (
+                    Array.isArray(
+                        order.items
+                    )
+                ) {
+
+                    order.items.forEach(
+                        function (item) {
+
+                            itemsHTML += `
+                                <div
+                                    class="food-item"
+                                >
+                                    ${escapeHTML(
+                                        item.name
+                                    )}
+                                    ×
+                                    ${item.quantity}
+                                </div>
+                            `;
+                        }
+                    );
+
+                } else {
+
+                    itemsHTML =
+                        "No items";
+                }
+
+
+                const createdTime =
+                    order.created_at
+                        ? new Date(
+                            order.created_at
+                        ).toLocaleString(
+                            "en-IN"
+                        )
+                        : "-";
+
+
+                const customerPhone =
+                    order.customer_phone ||
+                    "";
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${escapeHTML(
+                            order.customer_name
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            customerPhone ||
+                            "Not provided"
+                        )}
+                    </td>
+
+
+                    <td>
+                        Table
+                        ${escapeHTML(
+                            order.table_number
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${itemsHTML}
+                    </td>
+
+
+                    <td class="food-total">
+
+                        ₹${Number(
+                            order.total_amount ||
+                            0
+                        ).toFixed(2)}
+
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            createdTime
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status ${status}"
+                        >
+                            ${escapeHTML(
+                                status
+                            )}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="actions">
+
+                            <button
+                                class="confirm-btn"
+                                onclick="
+                                    updateFoodOrderStatus(
+                                        '${escapeJS(
+                                            order.id
+                                        )}',
+                                        'confirmed'
                                     )
-                                )}
-                            </div>
-                        `;
-                    }
+                                "
+                            >
+                                Confirm
+                            </button>
+
+
+                            <button
+                                class="reject-btn"
+                                onclick="
+                                    updateFoodOrderStatus(
+                                        '${escapeJS(
+                                            order.id
+                                        )}',
+                                        'rejected'
+                                    )
+                                "
+                            >
+                                Reject
+                            </button>
+
+
+                            <button
+                                class="whatsapp-btn"
+                                onclick="
+                                    sendFoodOrderWhatsApp(
+                                        '${escapeJS(
+                                            order.customer_name
+                                        )}',
+                                        '${escapeJS(
+                                            customerPhone
+                                        )}',
+                                        '${escapeJS(
+                                            order.table_number
+                                        )}',
+                                        '${escapeJS(
+                                            JSON.stringify(
+                                                order.items || []
+                                            )
+                                        )}',
+                                        '${escapeJS(
+                                            String(
+                                                order.total_amount ||
+                                                0
+                                            )
+                                        )}',
+                                        '${escapeJS(
+                                            status
+                                        )}'
+                                    )
+                                "
+                            >
+                                WhatsApp
+                            </button>
+
+
+                            <button
+                                class="delete-btn"
+                                onclick="
+                                    deleteFoodOrder(
+                                        '${escapeJS(
+                                            order.id
+                                        )}'
+                                    )
+                                "
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                tableBody.appendChild(
+                    row
                 );
 
-            } else {
-
-                itemsHTML =
-                    "-";
             }
-
-            const createdTime =
-                order.created_at
-                    ? new Date(
-                        order.created_at
-                    ).toLocaleString(
-                        "en-IN"
-                    )
-                    : "-";
-
-            row.innerHTML = `
-
-                <td>
-                    ${escapeHTML(
-                        order.customer_name || ""
-                    )}
-                </td>
-
-                <td>
-                    Table
-                    ${escapeHTML(
-                        order.table_number || ""
-                    )}
-                </td>
-
-                <td class="food-items">
-                    ${itemsHTML}
-                </td>
-
-                <td class="food-order-total">
-                    ₹${Number(
-                        order.total_amount || 0
-                    ).toFixed(2)}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        createdTime
-                    )}
-                </td>
-
-                <td>
-                    <span class="status ${status}">
-                        ${escapeHTML(status)}
-                    </span>
-                </td>
-
-                <td>
-
-                    <div class="action-buttons">
-
-                        <button
-                            class="confirm-btn"
-                            onclick="updateFoodOrderStatus(
-                                ${order.id},
-                                'confirmed'
-                            )">
-                            Confirm
-                        </button>
-
-                        <button
-                            class="reject-btn"
-                            onclick="updateFoodOrderStatus(
-                                ${order.id},
-                                'rejected'
-                            )">
-                            Reject
-                        </button>
-
-                        <button
-                            class="whatsapp-btn"
-                            onclick="openFoodOrderWhatsApp(
-                                '${escapeJS(
-                                    order.customer_name || ""
-                                )}',
-                                '${escapeJS(
-                                    order.table_number || ""
-                                )}',
-                                '${escapeJS(
-                                    JSON.stringify(
-                                        order.items || []
-                                    )
-                                )}',
-                                '${escapeJS(
-                                    String(
-                                        order.total_amount || 0
-                                    )
-                                )}'
-                            )">
-                            WhatsApp
-                        </button>
-
-                        <button
-                            class="delete-btn"
-                            onclick="deleteFoodOrder(
-                                ${order.id}
-                            )">
-                            Delete
-                        </button>
-
-                    </div>
-
-                </td>
-            `;
-
-            tableBody.appendChild(row);
-        });
-
-        updateFoodOrderStatistics(data);
+        );
     }
 
 
-    /* ==========================================
+
+    /* =========================================
        FOOD ORDER STATISTICS
-    ========================================== */
+    ========================================= */
 
     function updateFoodOrderStatistics(
         orders
@@ -1169,148 +1647,173 @@
         const totalOrders =
             orders.length;
 
+
         let pendingOrders = 0;
 
-        let totalSales = 0;
+        let sales = 0;
+
 
         orders.forEach(
             function (order) {
 
                 if (
-                    (order.status || "pending")
-                    === "pending"
+                    (order.status ||
+                        "pending") ===
+                    "pending"
                 ) {
+
                     pendingOrders++;
                 }
 
-                totalSales += Number(
-                    order.total_amount || 0
-                );
+
+                if (
+                    (order.status ||
+                        "pending") ===
+                    "confirmed"
+                ) {
+
+                    sales +=
+                        Number(
+                            order.total_amount ||
+                            0
+                        );
+                }
+
             }
         );
+
 
         document.getElementById(
             "totalFoodOrders"
         ).textContent =
             totalOrders;
 
+
         document.getElementById(
             "pendingFoodOrders"
         ).textContent =
             pendingOrders;
 
+
         document.getElementById(
             "foodOrderSales"
         ).textContent =
             "₹" +
-            totalSales.toFixed(2);
+            sales.toFixed(2);
     }
 
 
-    /* ==========================================
-       UPDATE FOOD ORDER STATUS
-    ========================================== */
+
+    /* =========================================
+       UPDATE FOOD ORDER
+    ========================================= */
 
     async function updateFoodOrderStatus(
         id,
         newStatus
     ) {
 
+        const action =
+            newStatus === "confirmed"
+                ? "confirm"
+                : "reject";
+
+
+        if (
+            !confirm(
+                "Are you sure you want to " +
+                action +
+                " this food order?"
+            )
+        ) {
+
+            return;
+        }
+
+
         const {
             error
-        } = await supabaseClient
-            .from("food_orders")
-            .update({
-                status: newStatus
-            })
-            .eq(
-                "id",
-                id
-            );
+        } =
+            await supabaseClient
+                .from("food_orders")
+                .update({
+                    status:
+                        newStatus
+                })
+                .eq(
+                    "id",
+                    id
+                );
+
 
         if (error) {
 
-            console.error(
-                "Food order update error:",
-                error
-            );
-
             alert(
-                "Failed to update food order:\n" +
+                "Could not update food order:\n\n" +
                 error.message
             );
 
             return;
         }
 
+
         showMessage(
-            "Food order status updated."
+            "Food order " +
+            newStatus +
+            " successfully."
         );
+
 
         await loadFoodOrders();
     }
 
 
-    /* ==========================================
-       DELETE FOOD ORDER
-    ========================================== */
 
-    async function deleteFoodOrder(id) {
-
-        const confirmed =
-            confirm(
-                "Are you sure you want to delete this food order?"
-            );
-
-        if (!confirmed) {
-            return;
-        }
-
-        const {
-            error
-        } = await supabaseClient
-            .from("food_orders")
-            .delete()
-            .eq(
-                "id",
-                id
-            );
-
-        if (error) {
-
-            console.error(
-                "Food order delete error:",
-                error
-            );
-
-            alert(
-                "Failed to delete food order:\n" +
-                error.message
-            );
-
-            return;
-        }
-
-        showMessage(
-            "Food order deleted successfully."
-        );
-
-        await loadFoodOrders();
-    }
-
-
-    /* ==========================================
+    /* =========================================
        FOOD ORDER WHATSAPP
-    ========================================== */
+    ========================================= */
 
-    function openFoodOrderWhatsApp(
+    function sendFoodOrderWhatsApp(
         customerName,
+        phone,
         tableNumber,
         itemsJSON,
-        total
+        total,
+        status
     ) {
 
+        let cleanPhone =
+            String(phone)
+                .replace(
+                    /\D/g,
+                    ""
+                );
+
+
+        if (
+            cleanPhone.length === 10
+        ) {
+
+            cleanPhone =
+                "91" +
+                cleanPhone;
+        }
+
+
+        if (
+            cleanPhone.length < 12
+        ) {
+
+            alert(
+                "This food order does not have a valid customer WhatsApp number."
+            );
+
+            return;
+        }
+
+
         let items = [];
+
 
         try {
 
@@ -1322,55 +1825,93 @@
         } catch (error) {
 
             console.error(
-                "Items JSON error:",
+                "Items error:",
                 error
             );
         }
 
+
         let message =
-            "SJ DINING FOOD ORDER\n\n";
+            "Hello " +
+            customerName +
+            ",\n\n";
+
+
+        if (
+            status === "confirmed"
+        ) {
+
+            message +=
+                "Your SJ Dining food order has been CONFIRMED. ✅\n\n";
+
+        } else if (
+            status === "rejected"
+        ) {
+
+            message +=
+                "We are sorry, but your SJ Dining food order could not be confirmed. ❌\n\n";
+
+        } else {
+
+            message +=
+                "Your SJ Dining food order is currently PENDING. ⏳\n\n";
+        }
+
 
         message +=
-            "Customer: " +
-            customerName +
-            "\n";
+            "ORDER DETAILS\n";
+
 
         message +=
             "Table: " +
             tableNumber +
             "\n\n";
 
+
         message +=
-            "ORDER ITEMS\n";
+            "ITEMS\n";
+
 
         items.forEach(
             function (item) {
 
+                const itemTotal =
+                    Number(
+                        item.price || 0
+                    ) *
+                    Number(
+                        item.quantity || 0
+                    );
+
+
                 message +=
                     item.name +
-                    " x " +
+                    " × " +
                     item.quantity +
                     " = ₹" +
-                    (
-                        Number(item.price || 0) *
-                        Number(item.quantity || 0)
-                    ) +
+                    itemTotal +
                     "\n";
             }
         );
+
 
         message +=
             "\nTOTAL: ₹" +
             total;
 
+
         message +=
-            "\n\nPlease confirm this food order.";
+            "\n\nThank you for choosing SJ Dining! 🍽️";
+
 
         const url =
-            "https://wa.me/?text=" +
+            "https://wa.me/" +
+            cleanPhone +
+            "?text=" +
             encodeURIComponent(
                 message
             );
+
 
         window.open(
             url,
@@ -1379,39 +1920,78 @@
     }
 
 
-    /* ==========================================
-       LOGOUT
-    ========================================== */
 
-    async function logout() {
+    /* =========================================
+       DELETE FOOD ORDER
+    ========================================= */
+
+    async function deleteFoodOrder(
+        id
+    ) {
+
+        if (
+            !confirm(
+                "Delete this food order permanently?"
+            )
+        ) {
+
+            return;
+        }
+
 
         const {
             error
-        } = await supabaseClient.auth.signOut();
+        } =
+            await supabaseClient
+                .from("food_orders")
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
+
 
         if (error) {
 
-            console.error(
-                "Logout error:",
-                error
-            );
-
             alert(
-                "Logout failed:\n" +
+                "Could not delete food order:\n\n" +
                 error.message
             );
 
             return;
         }
 
+
+        showMessage(
+            "Food order deleted successfully."
+        );
+
+
+        await loadFoodOrders();
+    }
+
+
+
+    /* =========================================
+       LOGOUT
+    ========================================= */
+
+    async function logout() {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+
         window.location.href =
             "login.html";
     }
 
 
-    /* ==========================================
+
+    /* =========================================
        MESSAGE
-    ========================================== */
+    ========================================= */
 
     function showMessage(
         text
@@ -1422,11 +2002,14 @@
                 "message"
             );
 
+
         message.textContent =
             text;
 
+
         message.style.display =
             "block";
+
 
         setTimeout(
             function () {
@@ -1440,79 +2023,117 @@
     }
 
 
-    /* ==========================================
-       SECURITY HELPERS
-    ========================================== */
+
+    /* =========================================
+       ESCAPE HTML
+    ========================================= */
 
     function escapeHTML(
         value
     ) {
 
-        return String(
-            value
-        )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+        }
+
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
     }
 
+
+
+    /* =========================================
+       ESCAPE JAVASCRIPT
+    ========================================= */
 
     function escapeJS(
         value
     ) {
 
-        return String(
-            value
-        )
-        .replace(
-            /\\/g,
-            "\\\\"
-        )
-        .replace(
-            /'/g,
-            "\\'"
-        )
-        .replace(
-            /"/g,
-            '\\"'
-        )
-        .replace(
-            /\r/g,
-            "\\r"
-        )
-        .replace(
-            /\n/g,
-            "\\n"
-        );
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+        }
+
+
+        return String(value)
+
+            .replace(
+                /\\/g,
+                "\\\\"
+            )
+
+            .replace(
+                /'/g,
+                "\\'"
+            )
+
+            .replace(
+                /"/g,
+                '\\"'
+            )
+
+            .replace(
+                /\r/g,
+                "\\r"
+            )
+
+            .replace(
+                /\n/g,
+                "\\n"
+            );
     }
 
 
-    /* ==========================================
-       START DASHBOARD
-    ========================================== */
+
+    /* =========================================
+       PAGE LOAD
+    ========================================= */
 
     document.addEventListener(
         "DOMContentLoaded",
         async function () {
 
-            await checkAdmin();
+            const allowed =
+                await checkAdmin();
+
+
+            if (!allowed) {
+                return;
+            }
+
 
             await loadBookings();
 
@@ -1523,5 +2144,7 @@
 
 </script>
 
+
 </body>
+
 </html>
