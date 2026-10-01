@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order Food - SJ Dining</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <style>
+        .order-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .order-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .order-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .table-badge {
+            display: inline-block;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .customer-section {
+            max-width: 600px;
+            margin: 0 auto 35px;
+        }
+
+        .customer-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .customer-section input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .food-section {
+            margin-bottom: 35px;
+        }
+
+        .food-section h2 {
+            margin-bottom: 18px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .food-info h3 {
+            margin: 0 0 6px;
+        }
+
+        .food-price {
+            font-weight: bold;
+        }
+
+        .add-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-section {
+            margin-top: 40px;
+            padding: 25px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.96);
+        }
+
+        .cart-section h2 {
+            margin-top: 0;
+        }
+
+        #cartItems {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-controls button {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #aaa;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #222;
+        }
+
+        .order-button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .food-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .food-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .add-btn {
+                width: 100%;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-controls {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">
+            <a href="index.html">SJ Dining</a>
+        </div>
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="booking.html">Book a Table</a></li>
+        </ul>
+    </nav>
+
+    <main class="order-container">
+
+        <div class="order-header">
+
+            <h1>Order Food</h1>
+
+            <p>
+                Choose your favourite food and place your order.
+            </p>
+
+            <div class="table-badge" id="tableDisplay">
+                Table Not Selected
+            </div>
+
+        </div>
+
+        <section class="customer-section">
+
+            <label for="customerName">
+                Customer Name
+            </label>
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your name"
+            >
+
+        </section>
+
+
+        <!-- PIZZA -->
+
+        <section class="food-section">
+
+            <h2>Pizza</h2>
+
+            <div class="food-grid">
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Margherita</h3>
+                        <span class="food-price">₹175</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Margherita" data-price="175">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Formaggio</h3>
+                        <span class="food-price">₹200</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Formaggio" data-price="200">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Chicken</h3>
+                        <span class="food-price">₹250</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Chicken" data-price="250">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Pineapple'o'clock</h3>
+                        <span class="food-price">₹135</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Pineapple'o'clock" data-price="135">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Meat Town</h3>
+                        <span class="food-price">₹300</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Meat Town" data-price="300">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Parma</h3>
+                        <span class="food-price">₹180</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Parma" data-price="180">
+                        Add
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PASTA -->
+
+        <section class="food-section">
+
+            <h2>Pasta</h2>
+
+            <div class="food-grid">
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Lasagna</h3>
+                        <span class="food-price">₹120</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Lasagna" data-price="120">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Ravioli</h3>
+                        <span class="food-price">₹90</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Ravioli" data-price="90">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Spaghetti Classica</h3>
+                        <span class="food-price">₹180</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Spaghetti Classica" data-price="180">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Seafood Pasta</h3>
+                        <span class="food-price">₹200</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Seafood Pasta" data-price="200">
+                        Add
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STARTERS -->
+
+        <section class="food-section">
+
+            <h2>Starters</h2>
+
+            <div class="food-grid">
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Today's Soup</h3>
+                        <span class="food-price">₹175</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Today's Soup" data-price="175">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Bruschetta</h3>
+                        <span class="food-price">₹69</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Bruschetta" data-price="69">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Garlic Bread</h3>
+                        <span class="food-price">₹75</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Garlic Bread" data-price="75">
+                        Add
+                    </button>
+                </div>
+
+
+                <div class="food-item">
+                    <div class="food-info">
+                        <h3>Tomozzarella</h3>
+                        <span class="food-price">₹99</span>
+                    </div>
+
+                    <button class="add-btn" data-name="Tomozzarella" data-price="99">
+                        Add
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CART -->
+
+        <section class="cart-section">
+
+            <h2>Your Order</h2>
+
+            <div id="cartItems">
+                <div class="empty-cart">
+                    No items added yet.
+                </div>
+            </div>
+
+            <div class="total-row">
+
+                <span>Total</span>
+
+                <span id="cartTotal">
+                    ₹0
+                </span>
+
+            </div>
+
+            <button
+                class="order-button"
+                id="orderButton"
+            >
+                Order via WhatsApp
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/order.js"></script>
+
+</body>
+</html>
